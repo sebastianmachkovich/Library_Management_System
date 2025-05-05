@@ -1,9 +1,10 @@
 // Library Management System Entry Point
+#include <iostream> 
 #include "Admin.h"
 #include "User.h"
 #include "Book.h"
 #include "LibraryAccountManager.h"
-#include "Borrowing.h"
+#include "Borrowing.h" 
 #include "Search.h"
 using namespace std; 
 
@@ -16,7 +17,7 @@ int main()
   // 4. Exit
   
 int userInput;
-  cout << "Welcome to the Library Managment System!" << endl;
+  cout << "Welcome to the Library Management System!" << endl; 
   cout << "Choose an option: " << endl;
   cout << "1. Register New Users" << endl;
   cout << "2. Admin (Librarian) Login" << endl;
@@ -39,7 +40,7 @@ int userInput;
   
   }
   else {
-  cout << "Thank you for useing the Library Managment System, have a great day!" << endl;
+  cout << "Thank you for useing the Library Management System, have a great day!" << endl;
   }
   return 0;
 }
