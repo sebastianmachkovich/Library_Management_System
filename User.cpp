@@ -47,10 +47,18 @@ void UserLogin::printUserSummary() const
   ifstream userFile("users.csv");
   ifstream borrowingFile("borrowing.csv");
   string line;
+  bool firstUserLine = true;
+  bool firstBorrowingLine = true;
 
   // Find and print user details
   while (getline(userFile, line))
   {
+    if (firstUserLine)
+    { // Skip header row
+      firstUserLine = false;
+      continue;
+    }
+
     if (line.find(libraryID) == 0)
     {
       stringstream ss(line);
@@ -75,6 +83,12 @@ void UserLogin::printUserSummary() const
   cout << "\nBorrowing History:\n";
   while (getline(borrowingFile, line))
   {
+    if (firstBorrowingLine)
+    { // Skip header row
+      firstBorrowingLine = false;
+      continue;
+    }
+
     if (line.find(libraryID) != string::npos)
     {
       cout << line << "\n";
