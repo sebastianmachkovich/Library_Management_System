@@ -1,9 +1,17 @@
 #ifndef LIBRARY_SYSTEM_H
 #define LIBRARY_SYSTEM_H
 
-#include "Admin.h"
+#include <string>
+
+// Forward declarations
+class User;
+class Admin;
+class Book;
+
+// Include User.h first since other classes depend on it
 #include "User.h"
 #include "Book.h"
+#include "Admin.h"
 
 class LibrarySystem
 {
@@ -26,4 +34,4 @@ public:
   void displayMainMenu() const;
 };
 
-#endif 
+#endif
