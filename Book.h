@@ -1,21 +1,47 @@
-#pragma once
+#ifndef BOOK_H
+#define BOOK_H
+
 #include <string>
+#include <vector>
+
+using namespace std;
+
+enum class ItemType
+{
+  BOOK,
+  MAGAZINE,
+  JOURNAL
+};
 
 class Book
 {
-  std::string title, author, publisher, id;
-  bool isBorrowed;
+private:
+  string id;
+  string title;
+  string author;
+  string publisher;
+  ItemType type;
+  bool isAvailable;
+  string currentBorrower;
 
 public:
-  Book();
-  Book(const std::string &title, const std::string &author, const std::string &publisher, const std::string &id);
-  Book(const Book &);
-  ~Book();
-  std::string getTitle() const;
-  std::string getAuthor() const;
-  std::string getPublisher() const;
-  std::string getID() const;
-  bool getIsBorrowed() const;
-  void setIsBorrowed(bool status);
-  // TODO: Add file I/O and more inventory management methods
+  Book(const string &title, const string &author,
+       const string &publisher, ItemType type);
+
+  // Getters
+  string getID() const { return id; }
+  string getTitle() const { return title; }
+  string getAuthor() const { return author; }
+  bool getAvailability() const { return isAvailable; }
+
+  // Setters
+  void setAvailability(bool available) { isAvailable = available; }
+  void setBorrower(const string &borrowerId) { currentBorrower = borrowerId; }
+
+  // Static functions for inventory management
+  static void saveToFile(const Book &book);
+  static vector<Book> searchBooks(const string &query);
+  static bool removeBook(const string &bookId);
 };
+
+#endif 

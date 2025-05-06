@@ -1,18 +1,27 @@
-#pragma once
+#ifndef BORROWING_H
+#define BORROWING_H
+
 #include <string>
 #include <vector>
-#include "Book.h"
+
+using namespace std;
 
 class Borrowing
 {
-  std::vector<std::string> borrowedBookIDs;
-  std::string userID;
+private:
+  static const int MAX_BOOKS = 4;
 
 public:
-  Borrowing(const std::string &userID);
-  ~Borrowing();
-  bool borrowBook(const std::string &bookID);
-  bool returnBook(const std::string &bookID);
-  std::vector<std::string> getBorrowedBooks() const;
-  // TODO: Add file I/O and admin edit/search methods
+  // Borrowing operations
+  bool borrowBook(const string &bookId, const string &userId);
+  bool returnBook(const string &bookId);
+  bool updateInventory(const string &bookId, bool isReturning);
+  bool editBorrowingRecord(const string &borrowId);
+
+  // Record management
+  vector<string> getBorrowerHistory(const string &userId) const;
+  int getCurrentBorrowCount(const string &userId) const;
+  bool isBorrowingLimitReached(const string &userId) const;
 };
+
+#endif 

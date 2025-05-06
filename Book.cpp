@@ -1,25 +1,94 @@
 #include "Book.h"
+#include <fstream>
+#include <sstream>
+#include <cstdlib>
 
-Book::Book() : title(""), author(""), publisher(""), id(""), isBorrowed(false) {}
+using namespace std;
 
-Book::Book(const std::string &t, const std::string &a, const std::string &p, const std::string &i)
-    : title(t), author(a), publisher(p), id(i), isBorrowed(false) {}
-
-Book::Book(const Book &other)
+Book::Book(const string &title, const string &author,
+           const string &publisher, ItemType type)
+    : title(title), author(author), publisher(publisher), type(type), isAvailable(true)
 {
-  title = other.title;
-  author = other.author;
-  publisher = other.publisher;
-  id = other.id;
-  isBorrowed = other.isBorrowed;
+  // Generate a simple ID based on title and author
+  id = title.substr(0, 3) + author.substr(0, 3) + to_string(rand() % 1000);
 }
 
-Book::~Book() {}
+void Book::saveToFile(const Book &book)
+{
+  ofstream file("books.csv", ios::app);
+  if (file.is_open())
+  {
+    file << book.id << ","
+         << book.title << ","
+         << book.author << ","
+         << book.publisher << ","
+         << static_cast<int>(book.type) << ","
+         << book.isAvailable << "\n";
+    file.close();
+  }
+}
 
-std::string Book::getTitle() const { return title; }
-std::string Book::getAuthor() const { return author; }
-std::string Book::getPublisher() const { return publisher; }
-std::string Book::getID() const { return id; }
-bool Book::getIsBorrowed() const { return isBorrowed; }
-void Book::setIsBorrowed(bool status) { isBorrowed = status; }
-// TODO: Implement file I/O and more inventory management methods
+vector<Book> Book::searchBooks(const string &query)
+{
+  vector<Book> results;
+  ifstream file("books.csv");
+  string line;
+
+  while (getline(file, line))
+  {
+    if (line.find(query) != string::npos)
+    {
+      stringstream ss(line);
+      string id, title, author, publisher, type, available;
+
+      getline(ss, id, ',');
+      getline(ss, title, ',');
+      getline(ss, author, ',');
+      getline(ss, publisher, ',');
+      getline(ss, type, ',');
+      getline(ss, available, ',');
+
+      Book book(title, author, publisher, static_cast<ItemType>(stoi(type)));
+      book.id = id;
+      book.isAvailable = (available == "1");
+      results.push_back(book);
+    }
+  }
+
+  return results;
+}
+
+bool Book::removeBook(const string &bookId)
+{
+  ifstream inFile("books.csv");
+  ofstream outFile("books_temp.csv");
+  string line;
+  bool found = false;
+
+  while (getline(inFile, line))
+  {
+    if (line.substr(0, line.find(',')) != bookId)
+    {
+      outFile << line << "\n";
+    }
+    else
+    {
+      found = true;
+    }
+  }
+
+  inFile.close();
+  outFile.close();
+
+  if (found)
+  {
+    remove("books.csv");
+    rename("books_temp.csv", "books.csv");
+  }
+  else
+  {
+    remove("books_temp.csv");
+  }
+
+  return found;
+}

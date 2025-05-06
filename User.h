@@ -1,24 +1,44 @@
-#pragma once
-#include "AbstractPerson.h"
-#include <string>
+#ifndef USER_H
+#define USER_H
 
-class User : public AbstractPerson
+#include <string>
+#include <vector>
+
+using namespace std;
+
+enum class UserType
 {
-protected:
-  std::string firstName, lastName, address, phone, email, password, institutionalID, libraryID;
-  static int userCount;
+  STUDENT,
+  FACULTY,
+  STAFF
+};
+
+// User Login class
+class UserLogin
+{
+private:
+  string libraryID;
+  string password;
 
 public:
-  User();
-  User(const std::string &firstName, const std::string &lastName, const std::string &address, const std::string &phone, const std::string &email, const std::string &password, const std::string &institutionalID);
-  User(const User &);
-  virtual ~User();
-  virtual std::string getName() const override;
-  virtual std::string getID() const override;
-  static int getUserCount();
-  void setAddress(const std::string &addr);
-  std::string getAddress() const;
-  void setPhone(const std::string &ph);
-  std::string getPhone() const;
-  // TODO: Add more getters/setters and file I/O methods
+  static bool authenticate(const string &libraryID, const string &password);
+  void logout();
+  void printUserSummary() const;
 };
+
+// Register New Users class
+class RegisterNewUsers
+{
+public:
+  bool registerUser(const string &firstName, const string &lastName,
+                    const string &address, const string &phone,
+                    const string &email, const string &password,
+                    const string &institutionalID, UserType type);
+
+private:
+  bool validateInformation(const string &email, const string &phone) const;
+  string generateLibraryID() const;
+  bool saveUserToFile(const string &userData) const;
+};
+
+#endif 
