@@ -1,5 +1,6 @@
 #include "Admin.h"
-#include "Book.h"#include "SearchFunction.h"
+#include "Book.h"
+#include "SearchFunction.h"
 #include <fstream>
 #include <sstream>
 
