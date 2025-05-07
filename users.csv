@@ -1,3 +1,2 @@
-libraryID,password,firstName,lastName,address,email,phone,institutionalID,userType
-LIB7807,password,John,Doe,123 Smart St,johndoe@gmail.com,920-123-4567,123,STUDENT
-LIB407807,password1,Jill,Doe,123 Smart St,jilldoe@gmail.com,920-123-4566,122,STUDENT
+staff,John,Doe,123 Smart St,9201234567,johndoe@gmail.com,pass1,123,LIB69046
+student,Jill,Doe,123 Smart St,9201234566,jilldoe@gmail.com,pass2,122,LIB82619

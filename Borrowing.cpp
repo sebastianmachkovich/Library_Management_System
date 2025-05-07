@@ -1,136 +1,163 @@
+#include "Borrowing.h"
+#include <iostream>
 #include <fstream>
 #include <sstream>
-// Only essential includes for file and string operations
+#include <ctime>
+using namespace std;
 
-// Borrow a book if user is under the limit
-bool Borrowing::borrowBook(const std::string &bookId, const std::string &userId)
+bool userCanBorrow(const string &userId)
 {
-  if (isBorrowingLimitReached(userId))
-    return false;
-  std::ofstream file("borrowing.csv", std::ios::app);
-  if (file.is_open())
+  ifstream file("borrowings.csv");
+  string line;
+  int count = 0;
+  while (getline(file, line))
   {
-    file << bookId << "," << userId << ",0,0\n"; // 0 for date/returned for simplicity
-    file.close();
-    return updateInventory(bookId, false);
+    stringstream ss(line);
+    string uid, bid, date, returned;
+    getline(ss, uid, ',');
+    getline(ss, bid, ',');
+    getline(ss, date, ',');
+    getline(ss, returned, ',');
+    if (uid == userId && returned != "Y")
+      count++;
+  }
+  return count < 4;
+}
+
+bool bookAvailable(const string &bookId)
+{
+  ifstream file("books.csv");
+  string line;
+  while (getline(file, line))
+  {
+    stringstream ss(line);
+    string id, title, author, publisher, year, copies;
+    getline(ss, id, ',');
+    getline(ss, title, ',');
+    getline(ss, author, ',');
+    getline(ss, publisher, ',');
+    getline(ss, year, ',');
+    getline(ss, copies, ',');
+    if (id == bookId && stoi(copies) > 0)
+      return true;
   }
   return false;
 }
 
-// Return a borrowed book
-bool Borrowing::returnBook(const std::string &bookId)
+void updateBookCopies(const string &bookId, int delta)
 {
-  std::ifstream inFile("borrowing.csv");
-  std::ofstream outFile("borrowing_temp.csv");
-  std::string line;
-  bool found = false;
-  while (std::getline(inFile, line))
+  ifstream inFile("books.csv");
+  ofstream outFile("books_tmp.csv");
+  string line;
+  while (getline(inFile, line))
   {
-    std::stringstream ss(line);
-    std::string bId, uId, borrowDate, returned;
-    std::getline(ss, bId, ',');
-    std::getline(ss, uId, ',');
-    std::getline(ss, borrowDate, ',');
-    std::getline(ss, returned, ',');
-    if (bId == bookId && returned == "0")
-    {
-      outFile << bId << "," << uId << "," << borrowDate << ",1\n";
-      found = true;
-    }
-    else
-    {
-      outFile << line << "\n";
-    }
-  }
-  inFile.close();
-  outFile.close();
-  if (found)
-  {
-    std::remove("borrowing.csv");
-    std::rename("borrowing_temp.csv", "borrowing.csv");
-    return updateInventory(bookId, true);
-  }
-  std::remove("borrowing_temp.csv");
-  return false;
-}
-
-// Update book availability in inventory
-bool Borrowing::updateInventory(const std::string &bookId, bool isReturning)
-{
-  std::ifstream inFile("books.csv");
-  std::ofstream outFile("books_temp.csv");
-  std::string line;
-  bool found = false;
-  while (std::getline(inFile, line))
-  {
-    std::stringstream ss(line);
-    std::string id;
-    std::getline(ss, id, ',');
+    stringstream ss(line);
+    string id, title, author, publisher, year, copies;
+    getline(ss, id, ',');
+    getline(ss, title, ',');
+    getline(ss, author, ',');
+    getline(ss, publisher, ',');
+    getline(ss, year, ',');
+    getline(ss, copies, ',');
     if (id == bookId)
     {
-      size_t lastComma = line.find_last_of(',');
-      outFile << line.substr(0, lastComma + 1) << (isReturning ? "1" : "0") << "\n";
-      found = true;
+      int newCopies = stoi(copies) + delta;
+      if (newCopies < 0)
+        newCopies = 0;
+      outFile << id << ',' << title << ',' << author << ',' << publisher << ',' << year << ',' << newCopies << '\n';
     }
     else
     {
-      outFile << line << "\n";
+      outFile << line << '\n';
     }
   }
   inFile.close();
   outFile.close();
+  remove("books.csv");
+  rename("books_tmp.csv", "books.csv");
+}
+
+void Borrowing::borrowBook()
+{
+  string userId, bookId;
+  cout << "Enter Library ID: ";
+  getline(cin, userId);
+  cout << "Enter Book ID: ";
+  getline(cin, bookId);
+  if (!userCanBorrow(userId))
+  {
+    cout << "User has already borrowed 4 books." << endl;
+    return;
+  }
+  if (!bookAvailable(bookId))
+  {
+    cout << "Book not available." << endl;
+    return;
+  }
+  // Get current date
+  time_t t = time(0);
+  tm *now = localtime(&t);
+  char dateStr[11];
+  strftime(dateStr, 11, "%Y-%m-%d", now);
+  ofstream file("borrowings.csv", ios::app);
+  file << userId << ',' << bookId << ',' << dateStr << ",N\n";
+  file.close();
+  updateBookCopies(bookId, -1);
+  cout << "Book borrowed successfully!" << endl;
+}
+
+void Borrowing::returnBook()
+{
+  string userId, bookId;
+  cout << "Enter Library ID: ";
+  getline(cin, userId);
+  cout << "Enter Book ID: ";
+  getline(cin, bookId);
+  ifstream inFile("borrowings.csv");
+  ofstream outFile("borrowings_tmp.csv");
+  string line;
+  bool found = false;
+  while (getline(inFile, line))
+  {
+    stringstream ss(line);
+    string uid, bid, date, returned;
+    getline(ss, uid, ',');
+    getline(ss, bid, ',');
+    getline(ss, date, ',');
+    getline(ss, returned, ',');
+    if (uid == userId && bid == bookId && returned != "Y")
+    {
+      outFile << uid << ',' << bid << ',' << date << ",Y\n";
+      found = true;
+    }
+    else
+    {
+      outFile << line << '\n';
+    }
+  }
+  inFile.close();
+  outFile.close();
+  remove("borrowings.csv");
+  rename("borrowings_tmp.csv", "borrowings.csv");
   if (found)
   {
-    std::remove("books.csv");
-    std::rename("books_temp.csv", "books.csv");
+    updateBookCopies(bookId, 1);
+    cout << "Book returned successfully!" << endl;
   }
   else
   {
-    std::remove("books_temp.csv");
+    cout << "No active borrowing record found for this user and book." << endl;
   }
-  return found;
 }
 
-// Get borrowing history for a user
-std::vector<std::string> Borrowing::getBorrowerHistory(const std::string &userId) const
+void Borrowing::editBorrowing()
 {
-  std::vector<std::string> history;
-  std::ifstream file("borrowing.csv");
-  std::string line;
-  while (std::getline(file, line))
-  {
-    if (line.find(userId) != std::string::npos)
-    {
-      history.push_back(line);
-    }
-  }
-  return history;
+  cout << "[Edit Borrowing Record] (Not fully implemented yet)" << endl;
+  // To be implemented: search and edit borrowing record
 }
 
-// Get current borrow count for a user
-int Borrowing::getCurrentBorrowCount(const std::string &userId) const
+void Borrowing::searchBorrowing()
 {
-  std::ifstream file("borrowing.csv");
-  std::string line;
-  int count = 0;
-  while (std::getline(file, line))
-  {
-    std::stringstream ss(line);
-    std::string bookId, uId, borrowDate, returned;
-    std::getline(ss, bookId, ',');
-    std::getline(ss, uId, ',');
-    std::getline(ss, borrowDate, ',');
-    std::getline(ss, returned, ',');
-    if (uId == userId && returned == "0")
-    {
-      count++;
-    }
-  }
-  return count;
-}
-
-// Check if user has reached borrowing limit
-bool Borrowing::isBorrowingLimitReached(const std::string &userId) const
-{
-  return getCurrentBorrowCount(userId) >= MAX_BOOKS;
+  cout << "[Search Borrowing Records] (Not fully implemented yet)" << endl;
+  // To be implemented: search borrowing records
 }
