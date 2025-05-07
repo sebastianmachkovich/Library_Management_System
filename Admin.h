@@ -6,6 +6,7 @@ using namespace std;
 class Admin
 {
 public:
+  string loggedInUsername; 
   bool login();
   void adminMenu();
   void addBook();

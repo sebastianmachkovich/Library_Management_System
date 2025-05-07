@@ -30,6 +30,8 @@ bool UserLogin::login(string &userId)
     if (userEmail == email && userPass == password)
     {
       userId = libID;
+      firstName = first;
+      lastName = last;
       cout << "Login successful!" << endl;
       return true;
     }
@@ -44,12 +46,15 @@ void UserLogin::userOptions(const string &userId)
   while (true)
   {
     cout << "\n===== User Portal =====" << endl;
+    cout << "Welcome " << firstName << " " << lastName << endl;
     cout << "1. Account information" << endl;
     cout << "2. Borrowing history" << endl;
     cout << "3. Currently borrowed books" << endl;
     cout << "4. Exit" << endl;
     cout << "Enter your choice: ";
     cin >> choice;
+    if (choice == 4)
+      return; // Exit immediately, no cin.ignore()
     cin.ignore();
 
     switch (choice)
@@ -63,8 +68,6 @@ void UserLogin::userOptions(const string &userId)
     case 3:
       UserLogin::currentlyBorrowed(userId);
       break;
-    case 4:
-      return; // Exit immediately
     default:
       cout << "Invalid choice. Try again." << endl;
     }
@@ -106,12 +109,13 @@ void UserLogin::printUserSummary(const string &userId)
 
 void UserLogin::borrowingHistory(const string &userId)
 {
-  bool found = false; 
-  if (found) {
+  bool found = false;
+  if (found)
+  {
     cout << "You have borrowed: " << endl;
   }
   ifstream file("borrowings.csv");
-  string line; 
+  string line;
   while (getline(file, line))
   {
     stringstream ss(line);
@@ -160,9 +164,10 @@ void UserLogin::borrowingHistory(const string &userId)
 void UserLogin::currentlyBorrowed(const string &userId)
 {
   bool found = false;
-  if (found) {
+  if (found)
+  {
     cout << "You are currently borrowing: " << endl;
-  } 
+  }
   ifstream file("borrowings.csv");
   string line;
   while (getline(file, line))

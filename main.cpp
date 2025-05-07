@@ -20,7 +20,7 @@ int main()
     cout << "4. Exit" << endl;
     cout << "Enter your choice: ";
     cin >> choice;
-    cin.ignore();
+    cin.ignore(); // Add this line to clear the newline after menu input
 
     switch (choice)
     {
@@ -52,7 +52,6 @@ void registerNewUser()
 void adminLogin()
 {
   Admin admin;
-  cin.ignore(); // Clear input buffer
   if (admin.login())
   {
     admin.adminMenu();
@@ -63,11 +62,8 @@ void userLogin()
 {
   UserLogin userLogin;
   string userId;
-  cin.ignore(); // Clear input buffer
   if (userLogin.login(userId))
   {
     userLogin.userOptions(userId);
-    cout << "\nPress Enter to log out...";
-    cin.get();
   }
 }

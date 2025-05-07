@@ -16,10 +16,8 @@ void Book::input()
   getline(cin, publisher);
   cout << "Enter Year: ";
   cin >> year;
-  cin.ignore();
   cout << "Enter Number of Copies: ";
   cin >> copies;
-  cin.ignore();
 }
 
 void Book::print() const

@@ -6,6 +6,8 @@ using namespace std;
 class UserLogin
 {
 public:
+  string firstName;
+  string lastName;
   bool login(string &userId);
   void userOptions(const string &userId);
   void printUserSummary(const string &userId);

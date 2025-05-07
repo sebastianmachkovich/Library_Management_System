@@ -34,6 +34,7 @@ bool Admin::login()
     if (user == username && pass == password)
     {
       cout << "Login successful!" << endl;
+      loggedInUsername = username; // Store the username
       return true;
     }
   }
@@ -44,7 +45,6 @@ bool Admin::login()
 void Admin::addBook()
 {
   Book book;
-  cin.ignore(); // clear buffer
   book.input();
   ofstream file("books.csv", ios::app);
   file << book.id << ',' << book.title << ',' << book.author << ',' << book.publisher << ',' << book.year << ',' << book.copies << '\n';
@@ -277,6 +277,7 @@ void Admin::adminMenu()
   while (true)
   {
     cout << "\n===== Admin Menu =====" << endl;
+    cout << "Welcome " << loggedInUsername << endl;
     cout << "1. Add Book" << endl;
     cout << "2. Delete Book" << endl;
     cout << "3. Edit Book" << endl;
