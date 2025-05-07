@@ -10,7 +10,7 @@ public:
   void userOptions(const string &userId);
   void printUserSummary(const string &userId);
   void borrowingHistory(const string &userId);
-  Void currentlyBorrowed(const string &userId);
+  void currentlyBorrowed(const string &userId);
 };
 
 #endif

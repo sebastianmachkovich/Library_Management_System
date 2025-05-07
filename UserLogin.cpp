@@ -40,37 +40,35 @@ bool UserLogin::login(string &userId)
 
 void UserLogin::userOptions(const string &userId)
 {
-    int input;
-    while (input != 4)
-    {
-      cout << "\n===== User Portal =====" << endl;
-      cout << "1. Account information" << endl;
-      cout << "2. Borrowing history" << endl;
-      cout << "3. Currently borrowed books" << endl;
-      cout << "4. Exit" << endl;
-      cout << "Enter your choice: ";
-      cin >> choice;
-      cin.ignore();
+  int choice;
+  while (true)
+  {
+    cout << "\n===== User Portal =====" << endl;
+    cout << "1. Account information" << endl;
+    cout << "2. Borrowing history" << endl;
+    cout << "3. Currently borrowed books" << endl;
+    cout << "4. Exit" << endl;
+    cout << "Enter your choice: ";
+    cin >> choice;
+    cin.ignore();
 
-      switch (choice)
+    switch (choice)
     {
     case 1:
-      UserLogin::printUserSummary(const &userId);
+      UserLogin::printUserSummary(userId);
       break;
     case 2:
-      UserLogin::borrowingHistory(const &userId);
+      UserLogin::borrowingHistory(userId);
       break;
     case 3:
-      UserLogin::currentlyBorrowed(const &userId);
+      UserLogin::currentlyBorrowed(userId);
       break;
     case 4:
-      cout << "Exiting..." << endl;
-      break;
+      return; // Exit immediately
     default:
       cout << "Invalid choice. Try again." << endl;
     }
-      
-    }
+  }
 }
 
 void UserLogin::printUserSummary(const string &userId)
@@ -108,9 +106,12 @@ void UserLogin::printUserSummary(const string &userId)
 
 void UserLogin::borrowingHistory(const string &userId)
 {
-  cout << "You have borrowed: " << endl;
-ifstream file("borrowings.csv");
-  string line;
+  bool found = false; 
+  if (found) {
+    cout << "You have borrowed: " << endl;
+  }
+  ifstream file("borrowings.csv");
+  string line; 
   while (getline(file, line))
   {
     stringstream ss(line);
@@ -119,24 +120,50 @@ ifstream file("borrowings.csv");
     getline(ss, bookID, ',');
     getline(ss, dateBorrowed, ',');
     getline(ss, isReturned, ',');
-    
-    if(userId == userID){
-      cout << bookID << " on " << dateBorrowed;
-      if(isReturned == "Y"){
+
+    if (userId == userID)
+    {
+      found = true;
+      // Lookup book title
+      ifstream booksFile("books.csv");
+      string bookLine, bookTitle = "Unknown Title";
+      while (getline(booksFile, bookLine))
+      {
+        stringstream bookSS(bookLine);
+        string id, title;
+        getline(bookSS, id, ',');
+        getline(bookSS, title, ',');
+        if (id == bookID)
+        {
+          bookTitle = title;
+          break;
+        }
+      }
+      booksFile.close();
+      cout << bookTitle << " (ID: " << bookID << ") on " << dateBorrowed;
+      if (isReturned == "Y")
+      {
         cout << " and it is returned" << endl;
       }
-      else{
+      else
+      {
         cout << " and it is not returned" << endl;
       }
     }
-    
+  }
+  if (!found)
+  {
+    cout << "You have no borrowing history." << endl;
   }
 }
 
 void UserLogin::currentlyBorrowed(const string &userId)
 {
-  cout << "You are currently borrowing: " << endl;
-ifstream file("borrowings.csv");
+  bool found = false;
+  if (found) {
+    cout << "You are currently borrowing: " << endl;
+  } 
+  ifstream file("borrowings.csv");
   string line;
   while (getline(file, line))
   {
@@ -146,9 +173,31 @@ ifstream file("borrowings.csv");
     getline(ss, bookID, ',');
     getline(ss, dateBorrowed, ',');
     getline(ss, isReturned, ',');
-    
-    if(userId == userID && isReturned == "N"){
-      cout << bookID << " on " << dateBorrowed << endl;
+
+    if (userId == userID && isReturned == "N")
+    {
+      found = true;
+      // Lookup book title
+      ifstream booksFile("books.csv");
+      string bookLine, bookTitle = "Unknown Title";
+      while (getline(booksFile, bookLine))
+      {
+        stringstream bookSS(bookLine);
+        string id, title;
+        getline(bookSS, id, ',');
+        getline(bookSS, title, ',');
+        if (id == bookID)
+        {
+          bookTitle = title;
+          break;
+        }
+      }
+      booksFile.close();
+      cout << bookTitle << " (ID: " << bookID << ") on " << dateBorrowed << endl;
     }
+  }
+  if (!found)
+  {
+    cout << "You are not currently borrowing any books." << endl;
   }
 }
