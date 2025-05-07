@@ -3,9 +3,9 @@
 
 #include <string>
 #include <vector>
+// Only essential includes for clarity
 
-using namespace std;
-
+// Borrowing class handles book borrowing operations
 class Borrowing
 {
 private:
@@ -13,15 +13,15 @@ private:
 
 public:
   // Borrowing operations
-  bool borrowBook(const string &bookId, const string &userId);
-  bool returnBook(const string &bookId);
-  bool updateInventory(const string &bookId, bool isReturning);
-  bool editBorrowingRecord(const string &borrowId);
+  bool borrowBook(const std::string &bookId, const std::string &userId);
+  bool returnBook(const std::string &bookId);
+  bool updateInventory(const std::string &bookId, bool isReturning);
+  bool editBorrowingRecord(const std::string &borrowId);
 
   // Record management
-  vector<string> getBorrowerHistory(const string &userId) const;
-  int getCurrentBorrowCount(const string &userId) const;
-  bool isBorrowingLimitReached(const string &userId) const;
+  std::vector<std::string> getBorrowerHistory(const std::string &userId) const;
+  int getCurrentBorrowCount(const std::string &userId) const;
+  bool isBorrowingLimitReached(const std::string &userId) const;
 };
 
-#endif 
+#endif

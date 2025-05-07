@@ -3,7 +3,9 @@
 
 #include <string>
 #include <vector>
+// Only essential includes for clarity
 
+// Enum for user types
 enum class UserType
 {
   STUDENT,
@@ -11,6 +13,7 @@ enum class UserType
   STAFF
 };
 
+// User class represents a library user
 class User
 {
 private:
@@ -41,6 +44,7 @@ public:
   bool authenticate(const std::string &pwd) const { return password == pwd; }
 };
 
+// Handles user login
 class UserLogin
 {
 private:
@@ -53,6 +57,7 @@ public:
   void printUserSummary() const;
 };
 
+// Handles new user registration
 class RegisterNewUsers
 {
 public:

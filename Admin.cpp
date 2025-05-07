@@ -1,31 +1,26 @@
-#include "Admin.h"
-#include "Book.h"
-#include "SearchFunction.h"
 #include <fstream>
 #include <sstream>
+// Only essential includes for file and string operations
 
 using namespace std;
 
+// Admin authentication: checks username and password in CSV
 bool Admin::login(const string &username, const string &password)
 {
   ifstream file("librarians.csv");
   string line;
   bool firstLine = true;
-
   while (getline(file, line))
   {
     if (firstLine)
-    { // Skip header
+    {
       firstLine = false;
       continue;
     }
-
     stringstream ss(line);
     string storedUsername, storedPassword;
-
     getline(ss, storedUsername, ',');
     getline(ss, storedPassword, ',');
-
     if (username == storedUsername && password == storedPassword)
     {
       this->username = username;
@@ -36,11 +31,11 @@ bool Admin::login(const string &username, const string &password)
   return false;
 }
 
+// Add a new inventory item (book, magazine, journal)
 bool Admin::addInventoryItem(const string &title, const string &author, const string &type)
 {
   if (!isLoggedIn)
     return false;
-
   ItemType itemType;
   if (type == "BOOK")
     itemType = ItemType::BOOK;
@@ -50,12 +45,12 @@ bool Admin::addInventoryItem(const string &title, const string &author, const st
     itemType = ItemType::JOURNAL;
   else
     return false;
-
   Book book(title, author, "Unknown", itemType);
   Book::saveToFile(book);
   return true;
 }
 
+// Delete an inventory item by ID
 bool Admin::deleteInventoryItem(const string &itemId)
 {
   if (!isLoggedIn)
@@ -63,18 +58,17 @@ bool Admin::deleteInventoryItem(const string &itemId)
   return Book::removeBook(itemId);
 }
 
+// Edit an inventory item's field
 bool Admin::editInventoryItem(const string &itemId, const string &field, const string &newValue)
 {
   if (!isLoggedIn)
     return false;
-
   ifstream inFile("books.csv");
   ofstream outFile("books_temp.csv");
   string line;
   bool found = false;
   vector<string> headers;
   bool isHeader = true;
-
   while (getline(inFile, line))
   {
     stringstream ss(line);
@@ -82,7 +76,6 @@ bool Admin::editInventoryItem(const string &itemId, const string &field, const s
     vector<string> fields;
     while (getline(ss, fieldVal, ','))
       fields.push_back(fieldVal);
-
     if (isHeader)
     {
       headers = fields;
@@ -90,7 +83,6 @@ bool Admin::editInventoryItem(const string &itemId, const string &field, const s
       isHeader = false;
       continue;
     }
-
     if (fields[0] == itemId)
     {
       for (size_t i = 0; i < headers.size(); ++i)
@@ -109,7 +101,6 @@ bool Admin::editInventoryItem(const string &itemId, const string &field, const s
   }
   inFile.close();
   outFile.close();
-
   if (found)
   {
     remove("books.csv");
@@ -122,18 +113,17 @@ bool Admin::editInventoryItem(const string &itemId, const string &field, const s
   return found;
 }
 
+// Edit user details in users.csv
 bool Admin::editUserDetails(const string &libraryId, const string &field, const string &newValue)
 {
   if (!isLoggedIn)
     return false;
-
   ifstream inFile("users.csv");
   ofstream outFile("users_temp.csv");
   string line;
   bool found = false;
   vector<string> headers;
   bool isHeader = true;
-
   while (getline(inFile, line))
   {
     stringstream ss(line);
@@ -141,7 +131,6 @@ bool Admin::editUserDetails(const string &libraryId, const string &field, const 
     vector<string> fields;
     while (getline(ss, fieldVal, ','))
       fields.push_back(fieldVal);
-
     if (isHeader)
     {
       headers = fields;
@@ -149,7 +138,6 @@ bool Admin::editUserDetails(const string &libraryId, const string &field, const 
       isHeader = false;
       continue;
     }
-
     if (fields[0] == libraryId)
     {
       for (size_t i = 0; i < headers.size(); ++i)
@@ -168,7 +156,6 @@ bool Admin::editUserDetails(const string &libraryId, const string &field, const 
   }
   inFile.close();
   outFile.close();
-
   if (found)
   {
     remove("users.csv");
@@ -181,28 +168,26 @@ bool Admin::editUserDetails(const string &libraryId, const string &field, const 
   return found;
 }
 
+// Get the number of active users (excluding header)
 int Admin::getActiveUserCount() const
 {
   if (!isLoggedIn)
-    return -1; 
-
+    return -1;
   ifstream file("users.csv");
   string line;
-  int count = -1; // Start at -1 to account for header
-
+  int count = -1; // Start at -1 to skip header
   while (getline(file, line))
   {
     count++;
   }
-
   return count;
 }
 
+// Add a new user account
 bool Admin::addUserAccount(const string &userData)
 {
   if (!isLoggedIn)
     return false;
-
   ofstream file("users.csv", ios::app);
   if (file.is_open())
   {
@@ -213,16 +198,15 @@ bool Admin::addUserAccount(const string &userData)
   return false;
 }
 
+// Delete a user account by library ID
 bool Admin::deleteUserAccount(const string &libraryId)
 {
   if (!isLoggedIn)
     return false;
-
   ifstream inFile("users.csv");
   ofstream outFile("users_temp.csv");
   string line;
   bool found = false;
-
   while (getline(inFile, line))
   {
     if (line.substr(0, line.find(',')) != libraryId)
@@ -234,10 +218,8 @@ bool Admin::deleteUserAccount(const string &libraryId)
       found = true;
     }
   }
-
   inFile.close();
   outFile.close();
-
   if (found)
   {
     remove("users.csv");
@@ -247,6 +229,5 @@ bool Admin::deleteUserAccount(const string &libraryId)
   {
     remove("users_temp.csv");
   }
-
   return found;
 }

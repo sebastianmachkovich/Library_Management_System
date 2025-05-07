@@ -3,9 +3,11 @@
 
 #include <string>
 #include <vector>
+// Only essential includes for clarity
 
 using namespace std;
 
+// Enum for item types in the library
 enum class ItemType
 {
   BOOK,
@@ -13,6 +15,7 @@ enum class ItemType
   JOURNAL
 };
 
+// Book class represents a library book or item
 class Book
 {
 private:
@@ -44,4 +47,4 @@ public:
   static bool removeBook(const string &bookId);
 };
 
-#endif 
+#endif

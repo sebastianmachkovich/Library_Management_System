@@ -1,29 +1,65 @@
 #include "Book.h"
 #include <fstream>
 #include <sstream>
-#include <cstdlib>
+#include <string>
+#include <vector>
 
 using namespace std;
+
+// Helper to convert ItemType to string
+static std::string itemTypeToString(ItemType type)
+{
+  switch (type)
+  {
+  case ItemType::BOOK:
+    return "Fiction";
+  case ItemType::MAGAZINE:
+    return "Magazine";
+  case ItemType::JOURNAL:
+    return "Journal";
+  default:
+    return "Unknown";
+  }
+}
+
+// Helper to get next unique numeric id from books.csv
+static std::string getNextBookId()
+{
+  std::ifstream file("books.csv");
+  std::string line, lastId = "0";
+  getline(file, line); // skip header
+  while (getline(file, line))
+  {
+    std::stringstream ss(line);
+    std::string id;
+    getline(ss, id, ',');
+    lastId = id;
+  }
+  int nextId = std::stoi(lastId) + 1;
+  return std::to_string(nextId);
+}
 
 Book::Book(const string &title, const string &author,
            const string &publisher, ItemType type)
     : title(title), author(author), publisher(publisher), type(type), isAvailable(true)
 {
-  // Generate a simple ID based on title and author
-  id = title.substr(0, 3) + author.substr(0, 3) + to_string(rand() % 1000);
+  // Generate a simple ID based on title and author (first 3 letters of each, lowercase)
+  id = title.substr(0, 3) + author.substr(0, 3);
 }
 
+// Save book details to file (CSV format)
 void Book::saveToFile(const Book &book)
 {
-  ofstream file("books.csv", ios::app);
+  std::ofstream file("books.csv", std::ios::app);
   if (file.is_open())
   {
-    file << book.id << ","
+    std::string id = getNextBookId();
+    file << id << ","
          << book.title << ","
          << book.author << ","
          << book.publisher << ","
-         << static_cast<int>(book.type) << ","
-         << book.isAvailable << "\n";
+         << itemTypeToString(book.type) << ","
+         << (book.isAvailable ? "true" : "false") << "\n";
     file.close();
   }
 }

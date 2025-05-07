@@ -3,9 +3,11 @@
 
 #include <string>
 #include <vector>
+// Only essential includes for clarity
 
 using namespace std;
 
+// Admin class manages inventory, users, and borrowing
 class Admin
 {
 private:
@@ -36,4 +38,4 @@ public:
   bool editBorrowingRecord(const string &borrowingId, const string &field, const string &newValue);
 };
 
-#endif 
+#endif

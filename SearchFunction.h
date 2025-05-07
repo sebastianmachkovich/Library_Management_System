@@ -3,22 +3,22 @@
 
 #include <string>
 #include <vector>
+// Only essential includes for clarity
 
-using namespace std;
-
+// SearchFunction class provides search utilities for inventory and users
 class SearchFunction
 {
 public:
   // Inventory search methods
-  vector<string> searchByTitle(const string &title) const;
-  vector<string> searchByAuthor(const string &author) const;
-  vector<string> searchByPublisher(const string &publisher) const;
+  std::vector<std::string> searchByTitle(const std::string &title) const;
+  std::vector<std::string> searchByAuthor(const std::string &author) const;
+  std::vector<std::string> searchByPublisher(const std::string &publisher) const;
 
   // User search methods (admin only)
-  vector<string> searchUsers(const string &query) const;
+  std::vector<std::string> searchUsers(const std::string &query) const;
 
   // Format and display results
-  void displaySearchResults(const vector<string> &results) const;
+  void displaySearchResults(const std::vector<std::string> &results) const;
 };
 
-#endif 
+#endif

@@ -1,11 +1,12 @@
 #include "SearchFunction.h"
 #include <fstream>
 #include <sstream>
-#include <iostream>
 #include <algorithm>
+// Only essential includes for file and string operations
 
 using namespace std;
 
+// Search for books by title (case-insensitive)
 vector<string> SearchFunction::searchByTitle(const string &title) const
 {
   vector<string> results;
@@ -20,7 +21,6 @@ vector<string> SearchFunction::searchByTitle(const string &title) const
     getline(ss, id, ',');
     getline(ss, bookTitle, ',');
 
-    // Case-insensitive search
     string titleLower = title;
     string bookTitleLower = bookTitle;
     transform(titleLower.begin(), titleLower.end(), titleLower.begin(), ::tolower);
@@ -35,6 +35,7 @@ vector<string> SearchFunction::searchByTitle(const string &title) const
   return results;
 }
 
+// Search for books by author (case-insensitive)
 vector<string> SearchFunction::searchByAuthor(const string &author) const
 {
   vector<string> results;
@@ -50,7 +51,6 @@ vector<string> SearchFunction::searchByAuthor(const string &author) const
     getline(ss, title, ',');
     getline(ss, bookAuthor, ',');
 
-    // Case-insensitive search
     string authorLower = author;
     string bookAuthorLower = bookAuthor;
     transform(authorLower.begin(), authorLower.end(), authorLower.begin(), ::tolower);
@@ -65,6 +65,7 @@ vector<string> SearchFunction::searchByAuthor(const string &author) const
   return results;
 }
 
+// Search for books by publisher (case-insensitive)
 vector<string> SearchFunction::searchByPublisher(const string &publisher) const
 {
   vector<string> results;
@@ -81,7 +82,6 @@ vector<string> SearchFunction::searchByPublisher(const string &publisher) const
     getline(ss, author, ',');
     getline(ss, bookPublisher, ',');
 
-    // Case-insensitive search
     string publisherLower = publisher;
     string bookPublisherLower = bookPublisher;
     transform(publisherLower.begin(), publisherLower.end(), publisherLower.begin(), ::tolower);
@@ -96,6 +96,7 @@ vector<string> SearchFunction::searchByPublisher(const string &publisher) const
   return results;
 }
 
+// Search for users by query (case-insensitive)
 vector<string> SearchFunction::searchUsers(const string &query) const
 {
   vector<string> results;
@@ -118,6 +119,7 @@ vector<string> SearchFunction::searchUsers(const string &query) const
   return results;
 }
 
+// Display search results (implementation can be customized as needed)
 void SearchFunction::displaySearchResults(const vector<string> &results) const
 {
   if (results.empty())

@@ -2,17 +2,12 @@
 #define LIBRARY_SYSTEM_H
 
 #include <string>
-
-// Forward declarations
-class User;
-class Admin;
-class Book;
-
-// Include User.h first since other classes depend on it
 #include "User.h"
 #include "Book.h"
 #include "Admin.h"
+// Only essential includes for clarity
 
+// LibrarySystem class manages the main application flow
 class LibrarySystem
 {
 private:
