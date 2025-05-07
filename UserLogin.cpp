@@ -110,10 +110,6 @@ void UserLogin::printUserSummary(const string &userId)
 void UserLogin::borrowingHistory(const string &userId)
 {
   bool found = false;
-  if (found)
-  {
-    cout << "You have borrowed: " << endl;
-  }
   ifstream file("borrowings.csv");
   string line;
   while (getline(file, line))
@@ -164,10 +160,6 @@ void UserLogin::borrowingHistory(const string &userId)
 void UserLogin::currentlyBorrowed(const string &userId)
 {
   bool found = false;
-  if (found)
-  {
-    cout << "You are currently borrowing: " << endl;
-  }
   ifstream file("borrowings.csv");
   string line;
   while (getline(file, line))

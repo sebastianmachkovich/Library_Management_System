@@ -152,12 +152,93 @@ void Borrowing::returnBook()
 
 void Borrowing::editBorrowing()
 {
-  cout << "[Edit Borrowing Record] (Not fully implemented yet)" << endl;
-  // To be implemented: search and edit borrowing record
+  string userId, bookId;
+  cout << "Enter Library ID to edit: ";
+  getline(cin, userId);
+  cout << "Enter Book ID to edit: ";
+  getline(cin, bookId);
+  ifstream inFile("borrowings.csv");
+  ofstream outFile("borrowings_tmp.csv");
+  string line;
+  bool found = false;
+  while (getline(inFile, line))
+  {
+    stringstream ss(line);
+    string uid, bid, date, returned;
+    getline(ss, uid, ',');
+    getline(ss, bid, ',');
+    getline(ss, date, ',');
+    getline(ss, returned, ',');
+    if (uid == userId && bid == bookId)
+    {
+      found = true;
+      cout << "Current return status: " << returned << endl;
+      cout << "Enter new return status (Y/N): ";
+      string newStatus;
+      getline(cin, newStatus);
+      if (newStatus != "Y" && newStatus != "N")
+      {
+        cout << "Invalid status. Keeping old status." << endl;
+        newStatus = returned;
+      }
+      outFile << uid << ',' << bid << ',' << date << ',' << newStatus << '\n';
+    }
+    else
+    {
+      outFile << line << '\n';
+    }
+  }
+  inFile.close();
+  outFile.close();
+  remove("borrowings.csv");
+  rename("borrowings_tmp.csv", "borrowings.csv");
+  if (found)
+    cout << "Borrowing record updated." << endl;
+  else
+    cout << "Borrowing record not found." << endl;
 }
 
 void Borrowing::searchBorrowing()
 {
-  cout << "[Search Borrowing Records] (Not fully implemented yet)" << endl;
-  // To be implemented: search borrowing records
+  cout << "Search by: 1. Library ID  2. Book ID\nEnter option: ";
+  int option;
+  cin >> option;
+  cin.ignore();
+  string query;
+  if (option == 1)
+  {
+    cout << "Enter Library ID: ";
+    getline(cin, query);
+  }
+  else if (option == 2)
+  {
+    cout << "Enter Book ID: ";
+    getline(cin, query);
+  }
+  else
+  {
+    cout << "Invalid option." << endl;
+    return;
+  }
+  ifstream file("borrowings.csv");
+  string line;
+  bool found = false;
+  while (getline(file, line))
+  {
+    stringstream ss(line);
+    string uid, bid, date, returned;
+    getline(ss, uid, ',');
+    getline(ss, bid, ',');
+    getline(ss, date, ',');
+    getline(ss, returned, ',');
+    if ((option == 1 && uid == query) || (option == 2 && bid == query))
+    {
+      cout << "Library ID: " << uid << ", Book ID: " << bid << ", Date: " << date << ", Returned: " << returned << endl;
+      found = true;
+    }
+  }
+  if (!found)
+  {
+    cout << "No matching borrowing records found." << endl;
+  }
 }
