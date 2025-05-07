@@ -122,7 +122,7 @@ ifstream file("borrowings.csv");
     
     if(userId == userID){
       cout << bookID << " on " << dateBorrowed;
-      if(isReturned == 'Y'){
+      if(isReturned == "Y"){
         cout << " and it is returned" << endl;
       }
       else{
@@ -133,7 +133,7 @@ ifstream file("borrowings.csv");
   }
 }
 
-Void UserLogin::currentlyBorrowed(const string &userId)
+void UserLogin::currentlyBorrowed(const string &userId)
 {
   cout << "You are currently borrowing: " << endl;
 ifstream file("borrowings.csv");
@@ -147,7 +147,7 @@ ifstream file("borrowings.csv");
     getline(ss, dateBorrowed, ',');
     getline(ss, isReturned, ',');
     
-    if(userId == userID && isReturned == 'N'){
+    if(userId == userID && isReturned == "N"){
       cout << bookID << " on " << dateBorrowed << endl;
     }
   }
