@@ -66,7 +66,7 @@ void userLogin()
   cin.ignore(); // Clear input buffer
   if (userLogin.login(userId))
   {
-    userLogin.printUserSummary(userId);
+    userLogin.userOptions(userId);
     cout << "\nPress Enter to log out...";
     cin.get();
   }
