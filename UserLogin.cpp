@@ -4,6 +4,24 @@
 #include <sstream>
 using namespace std;
 
+UserLogin::UserLogin()
+{
+  firstName = new string;
+  lastName = new string;
+}
+
+UserLogin::UserLogin(const UserLogin &other)
+{
+  firstName = new string(*(other.firstName));
+  lastName = new string(*(other.lastName));
+}
+
+UserLogin::~UserLogin()
+{
+  delete firstName;
+  delete lastName;
+}
+
 bool UserLogin::login(string &userId)
 {
   string email, password;
@@ -30,8 +48,8 @@ bool UserLogin::login(string &userId)
     if (userEmail == email && userPass == password)
     {
       userId = libID;
-      firstName = first;
-      lastName = last;
+      *firstName = first;
+      *lastName = last;
       cout << "Login successful!" << endl;
       return true;
     }
@@ -46,7 +64,7 @@ void UserLogin::userOptions(const string &userId)
   while (true)
   {
     cout << "\n===== User Portal =====" << endl;
-    cout << "Welcome " << firstName << " " << lastName << endl;
+    cout << "Welcome " << *firstName << " " << *lastName << endl;
     cout << "1. Account information" << endl;
     cout << "2. Borrowing history" << endl;
     cout << "3. Currently borrowed books" << endl;
