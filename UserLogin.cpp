@@ -1,27 +1,38 @@
+// UserLogin.cpp - Implementation of the UserLogin class
+// Handles user login, user menu, account info, and borrowing history
 #include "UserLogin.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 using namespace std;
 
+// Static member to track number of UserLogin objects
+int UserLogin::userCount = 0;
+
+// Default constructor: allocates memory for first and last name
 UserLogin::UserLogin()
 {
   firstName = new string;
   lastName = new string;
+  userCount++;
 }
 
+// Copy constructor: copies first and last name
 UserLogin::UserLogin(const UserLogin &other)
 {
   firstName = new string(*(other.firstName));
   lastName = new string(*(other.lastName));
+  userCount++;
 }
 
+// Destructor: deallocates memory
 UserLogin::~UserLogin()
 {
   delete firstName;
   delete lastName;
 }
 
+// Handles user login by checking credentials in users.csv
 bool UserLogin::login(string &userId)
 {
   string email, password;
@@ -58,6 +69,7 @@ bool UserLogin::login(string &userId)
   return false;
 }
 
+// Displays user menu and handles user choices
 void UserLogin::userOptions(const string &userId)
 {
   int choice;
@@ -92,6 +104,15 @@ void UserLogin::userOptions(const string &userId)
   }
 }
 
+// Prints summary for the current user (using stored names)
+void UserLogin::printUserSummary()
+{
+  cout << "\n===== User Summary =====" << endl;
+  cout << "Name: " << *firstName << " " << *lastName << endl;
+  // You can add more fields if needed
+}
+
+// Prints summary for a user by Library ID (reads from users.csv)
 void UserLogin::printUserSummary(const string &userId)
 {
   ifstream file("users.csv");
@@ -125,6 +146,7 @@ void UserLogin::printUserSummary(const string &userId)
   cout << "User not found." << endl;
 }
 
+// Shows borrowing history for a user (all records in borrowings.csv)
 void UserLogin::borrowingHistory(const string &userId)
 {
   bool found = false;
@@ -175,6 +197,7 @@ void UserLogin::borrowingHistory(const string &userId)
   }
 }
 
+// Shows currently borrowed books for a user (borrowings with isReturned == 'N')
 void UserLogin::currentlyBorrowed(const string &userId)
 {
   bool found = false;

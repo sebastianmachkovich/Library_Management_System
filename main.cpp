@@ -1,18 +1,22 @@
+// main.cpp - Entry point for the Library Management System
+// Handles the main menu and user/admin navigation
 #include <iostream>
 #include "RegisterNewUser.h"
 #include "Admin.h"
 #include "UserLogin.h"
 using namespace std;
 
-void registerNewUser();
-void adminLogin();
-void userLogin();
+// Function prototypes for menu actions
+void registerNewUser(); // Register a new user
+void adminLogin();      // Admin login and menu
+void userLogin();       // User login and menu
 
 int main()
 {
   int choice;
   while (true)
   {
+    // Main menu for the system
     cout << "\n===== Library Management System =====" << endl;
     cout << "1. Register New Users" << endl;
     cout << "2. Admin (Librarian) Login" << endl;
@@ -25,13 +29,13 @@ int main()
     switch (choice)
     {
     case 1:
-      registerNewUser();
+      registerNewUser(); // Register a new user
       break;
     case 2:
-      adminLogin();
+      adminLogin(); // Admin login and menu
       break;
     case 3:
-      userLogin();
+      userLogin(); // User login and menu
       break;
     case 4:
       cout << "Exiting..." << endl;
@@ -43,12 +47,14 @@ int main()
   return 0;
 }
 
+// Calls the registration process for a new user
 void registerNewUser()
 {
   RegisterNewUser reg;
   reg.registerUser();
 }
 
+// Handles admin login and, if successful, shows the admin menu
 void adminLogin()
 {
   Admin admin;
@@ -58,6 +64,7 @@ void adminLogin()
   }
 }
 
+// Handles user login and, if successful, shows the user menu
 void userLogin()
 {
   UserLogin userLogin;

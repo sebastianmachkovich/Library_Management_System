@@ -1,3 +1,5 @@
+// Borrowing.cpp - Implementation of the Borrowing class for the Library Management System
+// Handles borrowing, returning, editing, and searching borrowing records
 #include "Borrowing.h"
 #include <iostream>
 #include <fstream>
@@ -5,6 +7,7 @@
 #include <ctime>
 using namespace std;
 
+// Checks if a user can borrow more books (limit: 4 active borrowings)
 bool userCanBorrow(const string &userId)
 {
   ifstream file("borrowings.csv");
@@ -24,6 +27,7 @@ bool userCanBorrow(const string &userId)
   return count < 4;
 }
 
+// Checks if a book is available (copies > 0)
 bool bookAvailable(const string &bookId)
 {
   ifstream file("books.csv");
@@ -44,6 +48,7 @@ bool bookAvailable(const string &bookId)
   return false;
 }
 
+// Updates the number of copies for a book by delta (can be positive or negative)
 void updateBookCopies(const string &bookId, int delta)
 {
   ifstream inFile("books.csv");
@@ -77,6 +82,7 @@ void updateBookCopies(const string &bookId, int delta)
   rename("books_tmp.csv", "books.csv");
 }
 
+// Allows a user to borrow a book if eligible and available
 void Borrowing::borrowBook()
 {
   string userId, bookId;
@@ -106,6 +112,7 @@ void Borrowing::borrowBook()
   cout << "Book borrowed successfully!" << endl;
 }
 
+// Allows a user to return a borrowed book
 void Borrowing::returnBook()
 {
   string userId, bookId;
@@ -150,6 +157,7 @@ void Borrowing::returnBook()
   }
 }
 
+// Allows editing the return status of a borrowing record
 void Borrowing::editBorrowing()
 {
   string userId, bookId;
@@ -198,6 +206,7 @@ void Borrowing::editBorrowing()
     cout << "Borrowing record not found." << endl;
 }
 
+// Allows searching borrowing records by Library ID or Book ID
 void Borrowing::searchBorrowing()
 {
   cout << "Search by: 1. Library ID  2. Book ID\nEnter option: ";

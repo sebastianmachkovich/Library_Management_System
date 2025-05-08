@@ -1,3 +1,5 @@
+// Admin.cpp - Implementation of the Admin class
+// Handles librarian/admin login, book/user management, and admin menu
 #include "Admin.h"
 #include "Book.h"
 #include "Borrowing.h"
@@ -8,6 +10,7 @@
 
 using namespace std;
 
+// Handles admin login by checking credentials in librarians.csv
 bool Admin::login()
 {
   string username, password;
@@ -42,6 +45,7 @@ bool Admin::login()
   return false;
 }
 
+// Adds a new book by prompting for details and appending to books.csv
 void Admin::addBook()
 {
   Book book;
@@ -52,6 +56,7 @@ void Admin::addBook()
   cout << "Book added successfully!" << endl;
 }
 
+// Deletes a book by Book ID from books.csv
 void Admin::deleteBook()
 {
   string delId;
@@ -85,6 +90,7 @@ void Admin::deleteBook()
     cout << "Book ID not found." << endl;
 }
 
+// Edits a book's details by Book ID
 void Admin::editBook()
 {
   string editId;
@@ -124,6 +130,7 @@ void Admin::editBook()
     cout << "Book ID not found." << endl;
 }
 
+// Adds a new user by calling RegisterNewUser
 void Admin::addUser()
 {
   cout << "[Admin Add User]" << endl;
@@ -131,6 +138,7 @@ void Admin::addUser()
   reg.registerUser();
 }
 
+// Deletes a user by Library ID from users.csv
 void Admin::deleteUser()
 {
   string delId;
@@ -172,6 +180,7 @@ void Admin::deleteUser()
     cout << "Library ID not found." << endl;
 }
 
+// Edits a user's details by Library ID
 void Admin::editUser()
 {
   string editId;
@@ -216,6 +225,7 @@ void Admin::editUser()
     cout << "Library ID not found." << endl;
 }
 
+// Counts and displays the total number of active users
 void Admin::viewTotalActiveUsers()
 {
   ifstream file("users.csv");
@@ -230,6 +240,7 @@ void Admin::viewTotalActiveUsers()
   cout << "Total active users: " << count << endl;
 }
 
+// Searches for books by keyword in books.csv
 void Admin::searchInventory()
 {
   string keyword;
@@ -250,6 +261,7 @@ void Admin::searchInventory()
     cout << "No matching books found." << endl;
 }
 
+// Searches for users by keyword in users.csv
 void Admin::searchUsers()
 {
   string keyword;
@@ -270,6 +282,7 @@ void Admin::searchUsers()
     cout << "No matching users found." << endl;
 }
 
+// Displays the admin menu and handles admin choices
 void Admin::adminMenu()
 {
   Borrowing borrowing;

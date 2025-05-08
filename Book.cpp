@@ -1,9 +1,13 @@
+// Book.cpp - Implementation of the Book class for the Library Management System
+// Handles book data input and output
 #include "Book.h"
 #include <iostream>
 using namespace std;
 
+// Default constructor initializes year and copies to 0
 Book::Book() : year(0), copies(0) {}
 
+// Prompts the user to input book details
 void Book::input()
 {
   cout << "Enter Book ID: ";
@@ -20,6 +24,7 @@ void Book::input()
   cin >> copies;
 }
 
+// Prints the book's details to the console
 void Book::print() const
 {
   cout << "ID: " << id << ", Title: " << title << ", Author: " << author
