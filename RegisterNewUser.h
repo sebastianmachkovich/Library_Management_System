@@ -14,7 +14,7 @@ public:
 private:
   bool isValidEmail(const string &email); // Validate email format
   bool isValidPhone(const string &phone); // Validate phone number
-  string generateLibraryID();             // Generate a unique library ID (no ctime)
+  string generateLibraryID();             // Generate a unique library ID
 };
 
 #endif
