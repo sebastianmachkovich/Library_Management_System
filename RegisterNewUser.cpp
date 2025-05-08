@@ -11,7 +11,7 @@ using namespace std;
 // Checks if the provided email contains '@' and '.'
 bool RegisterNewUser::isValidEmail(const string &email)
 {
-  return email.find('@') != string::npos && email.find('.') != string::npos;
+  return email.find('@') != string::npos && email.find('.') != string::npos; 
 }
 
 // Checks if the phone number is all digits and of valid length
