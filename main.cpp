@@ -20,7 +20,7 @@ int main()
     cout << "4. Exit" << endl;
     cout << "Enter your choice: ";
     cin >> choice;
-    cin.ignore(); // Add this line to clear the newline after menu input
+    cin.ignore();
 
     switch (choice)
     {
