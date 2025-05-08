@@ -8,6 +8,7 @@ using namespace std;
 class Person
 {
 public:
+    virtual ~Person() {}                 // Virtual destructor for safe polymorphic deletion
     virtual void printUserSummary() = 0; // Pure virtual function for printing user summary
 };
 

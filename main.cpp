@@ -67,10 +67,13 @@ void adminLogin()
 // Handles user login and, if successful, shows the user menu
 void userLogin()
 {
-  UserLogin userLogin;
-  string userId;
-  if (userLogin.login(userId))
+  Person *user = new UserLogin(); // Use base class pointer for polymorphism
+  string userId; 
+  UserLogin *userLogin = dynamic_cast<UserLogin *>(user);
+  if (userLogin && userLogin->login(userId))
   {
-    userLogin.userOptions(userId);
+    user->printUserSummary();
+    userLogin->userOptions(userId); 
   }
+  delete user; 
 }
