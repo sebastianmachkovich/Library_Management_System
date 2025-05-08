@@ -9,7 +9,7 @@ public:
   void registerUser();
 
 private:
-  bool isValidEmail(const string &email);
+  bool isValidEmail(const string &email); 
   bool isValidPhone(const string &phone);
   string generateLibraryID();
 };
